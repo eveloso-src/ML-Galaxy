@@ -3,12 +3,20 @@ package com.ml.rest;
 
 public class Forecast {
 
-    private int dia;
+    private static final String CLIMA_LLUVIA = "lluvia";
+    private static final String CLIMA_SEQUIA = "sequia";
+	private int dia;
     private String clima;
 
     public Forecast(int dia) {
         this.dia = dia;
-        this.clima = "";
+        this.clima = CLIMA_LLUVIA;
+        
+        // calcular desplazamiento 1
+        // calcular desplazamiento 2
+        // calcular desplazamiento 3
+        
+        
     }
 
 	public long getDia() {
