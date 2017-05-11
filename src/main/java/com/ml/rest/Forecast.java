@@ -3,12 +3,12 @@ package com.ml.rest;
 
 public class Forecast {
 
-    private final long dia;
-    private final String clima;
+    private int dia;
+    private String clima;
 
-    public Forecast(long dia, String clima) {
+    public Forecast(int dia) {
         this.dia = dia;
-        this.clima = clima;
+        this.clima = "";
     }
 
 	public long getDia() {

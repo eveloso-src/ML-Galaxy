@@ -1,8 +1,6 @@
 package com.ml.rest;
 
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,12 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class WeatherController {
 
-    private static final String template = "%s!";
-    private final AtomicLong counter = new AtomicLong();
+    //private static final String template = "%s!";
+    
 
     @RequestMapping("/clima")
-    public Forecast clima(@RequestParam(value="name", defaultValue="World") String name) {
-        return new Forecast(counter.incrementAndGet(),
-                            String.format(template, name));
+    public Forecast clima(@RequestParam(value="dia", defaultValue="") Integer dayNumber) {
+        return new Forecast(dayNumber );
     }
 }
