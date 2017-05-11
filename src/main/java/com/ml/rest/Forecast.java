@@ -11,6 +11,14 @@ public class Forecast {
         this.clima = clima;
     }
 
+	public long getDia() {
+		return dia;
+	}
+
+	public String getClima() {
+		return clima;
+	}
+
     
 
 
