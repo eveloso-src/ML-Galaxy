@@ -19,7 +19,7 @@ public class PlanetVulcano extends PlanetBase{
 	@Override
 	public int getOffsetInGrades(int days) {
 		int fullMovement = Math.abs(days * getSpeed()) ;
-		int grades = FULL_CICLE - fullMovement;
+		int grades = FULL_CYCLE - fullMovement;
 		return grades;
 	}
 

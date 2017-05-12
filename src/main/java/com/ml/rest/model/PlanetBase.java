@@ -4,7 +4,7 @@ import com.ml.rest.interfaces.PlanetMovement;
 
 public abstract class PlanetBase implements PlanetMovement {
 	
-	protected static final int FULL_CICLE = 360;
+	protected static final int FULL_CYCLE = 360;
 	protected abstract int getSpeed();	
 	protected abstract int getDistance();
 	
@@ -27,7 +27,7 @@ public abstract class PlanetBase implements PlanetMovement {
 	
 	public int getOffsetInGrades(int days) {
 		int fullMovement = (days * getSpeed()) ;
-		return fullMovement % FULL_CICLE;
+		return fullMovement % FULL_CYCLE;
 	}
 	
 }
