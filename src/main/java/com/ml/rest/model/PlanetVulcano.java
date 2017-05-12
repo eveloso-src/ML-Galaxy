@@ -3,6 +3,8 @@ package com.ml.rest.model;
 public class PlanetVulcano extends PlanetBase{
 	
 	protected static int SPEED = -5;
+	
+	protected static int DISTANCE = 1000;
 
 	@Override
 	protected int getSpeed() {
@@ -11,9 +13,9 @@ public class PlanetVulcano extends PlanetBase{
 	}
 
 	@Override
-	protected Position getPosition() {
-		// TODO Auto-generated method stub
-		return new Position();
+	protected int getDistance() {
+		
+		return DISTANCE;
 	}
 
 }

@@ -2,7 +2,9 @@ package com.ml.rest.model;
 
 public class PlanetBetasoide extends PlanetBase{
 	
-	protected static int SPEED = 1;
+	protected static int SPEED = 3;
+	
+	protected static int DISTANCE = 2000;
 
 	@Override
 	protected int getSpeed() {
@@ -11,10 +13,12 @@ public class PlanetBetasoide extends PlanetBase{
 	}
 
 	@Override
-	protected Position getPosition() {
-		// TODO Auto-generated method stub
-		return new Position();
+	protected int getDistance() {
+		
+		return DISTANCE;
 	}
+
+	
 	
 	
 	
