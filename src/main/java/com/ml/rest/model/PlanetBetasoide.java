@@ -8,19 +8,13 @@ public class PlanetBetasoide extends PlanetBase{
 
 	@Override
 	protected int getSpeed() {
-		// TODO Auto-generated method stub
 		return SPEED;
 	}
 
 	@Override
 	protected int getDistance() {
-		
 		return DISTANCE;
 	}
-
-	
-	
-	
 	
 
 }

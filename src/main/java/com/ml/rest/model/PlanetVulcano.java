@@ -8,14 +8,20 @@ public class PlanetVulcano extends PlanetBase{
 
 	@Override
 	protected int getSpeed() {
-		// TODO Auto-generated method stub
 		return SPEED;
 	}
 
 	@Override
 	protected int getDistance() {
-		
 		return DISTANCE;
 	}
+	
+	@Override
+	public int getOffsetInGrades(int days) {
+		int fullMovement = Math.abs(days * getSpeed()) ;
+		int grades = FULL_CICLE - fullMovement;
+		return grades;
+	}
+
 
 }
