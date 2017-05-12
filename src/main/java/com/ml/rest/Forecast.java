@@ -1,5 +1,9 @@
 package com.ml.rest;
 
+import com.ml.rest.model.PlanetBetasoide;
+import com.ml.rest.model.PlanetFerengi;
+import com.ml.rest.model.PlanetVulcano;
+import com.ml.rest.model.Position;
 
 public class Forecast {
 
@@ -12,9 +16,16 @@ public class Forecast {
         this.dia = dia;
         this.clima = CLIMA_LLUVIA;
         
+        PlanetBetasoide pbeta = new PlanetBetasoide();
+        PlanetFerengi pfere = new PlanetFerengi();
+        PlanetVulcano pvul = new PlanetVulcano();
+        
         // calcular desplazamiento 1
+         Position posBeta = pbeta.getPosition(pbeta.getOffsetInGrades(dia));
         // calcular desplazamiento 2
+         Position posFere = pbeta.getPosition(pfere.getOffsetInGrades(dia));
         // calcular desplazamiento 3
+         Position posVul = pbeta.getPosition(pvul.getOffsetInGrades(dia));
         
         
     }
