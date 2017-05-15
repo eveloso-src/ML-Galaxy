@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ml.rest.service.DayForecast;
+import com.ml.rest.model.DayForecast;
 
 @RestController
 public class WeatherController {

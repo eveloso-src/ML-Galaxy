@@ -1,4 +1,6 @@
-package com.ml.rest.service;
+package com.ml.rest.model;
+
+import com.ml.rest.service.DayForecastService;
 
 public class DayForecast {
 
