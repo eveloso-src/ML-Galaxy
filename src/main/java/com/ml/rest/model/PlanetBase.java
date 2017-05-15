@@ -21,7 +21,7 @@ public abstract class PlanetBase implements PlanetMovement {
 		double hipo2 = Math.pow(getDistance(), 2);
 		double adyac = Math.sqrt(hipo2 + catetoOP2);
 
-		return new Position(catetoOP2, adyac);
+		return new Position(catetoOP2, adyac, gradesOffset);
 	}
 	
 	

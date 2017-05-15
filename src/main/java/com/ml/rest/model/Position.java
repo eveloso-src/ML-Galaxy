@@ -4,10 +4,12 @@ public class Position {
 	
 	private double axisX;
 	private double axisY;
+	private double angle;
 	
-	public Position(double axisX, double axisY) {
+	public Position(double axisX, double axisY, double grad) {
 		this.axisX = axisX;
 		this.axisY = axisY;
+		this.angle = grad;
 	}
 	
 	public double getAxisX() {
@@ -22,6 +24,15 @@ public class Position {
 	public void setAxisY(double axisY) {
 		this.axisY = axisY;
 	}
+
+	public double getAngle() {
+		return angle;
+	}
+
+	public void setAngle(double angle) {
+		this.angle = angle;
+	}
+	
 	
 	
 
