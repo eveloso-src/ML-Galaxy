@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ml.rest.Forecast;
+import com.ml.rest.DayForecast;
 
 @RestController
 public class WeatherController {
@@ -14,7 +14,7 @@ public class WeatherController {
     
 
     @RequestMapping("/clima")
-    public Forecast clima(@RequestParam(value="dia", defaultValue="1") Integer dayNumber) {
-        return new Forecast(dayNumber );
+    public DayForecast clima(@RequestParam(value="dia", defaultValue="1") Integer dayNumber) {
+        return new DayForecast(dayNumber );
     }
 }
