@@ -17,4 +17,22 @@ public class WeatherController {
     public DayForecast clima(@RequestParam(value="dia", defaultValue="1") Integer dayNumber) {
         return new DayForecast(dayNumber );
     }
+    
+    @RequestMapping("/periodos")
+    public void periodos() {
+    	DayForecast fcst; 
+    	DayForecast fcstAux = null;
+    	
+    	for(int i=0; i < 30000 ; i++) {
+    		fcst = new DayForecast(i);
+    		
+    		if (fcstAux != null && fcstAux.getClima().equals(fcst.getClima())) {
+    			
+    		}
+    		
+    	}
+    	
+    	
+        //return new DayForecast(dayNumber );
+    }    
 }
