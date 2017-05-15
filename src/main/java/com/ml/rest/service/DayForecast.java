@@ -1,4 +1,4 @@
-package com.ml.rest;
+package com.ml.rest.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
