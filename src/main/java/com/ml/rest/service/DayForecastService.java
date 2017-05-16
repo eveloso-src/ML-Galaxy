@@ -50,6 +50,9 @@ public class DayForecastService {
 			// triang
 
 			java.util.List<Position> positionYOrder = new ArrayList<Position>();
+			positionYOrder.add(posFere);
+			positionYOrder.add(posBeta);
+			positionYOrder.add(posVul);
 
 			Collections.sort(positionYOrder, new PositionYComparator());
 
