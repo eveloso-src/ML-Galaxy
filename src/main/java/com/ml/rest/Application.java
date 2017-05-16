@@ -1,4 +1,4 @@
-package com.ml.rest.app;
+package com.ml.rest;
 
 
 import org.springframework.boot.SpringApplication;

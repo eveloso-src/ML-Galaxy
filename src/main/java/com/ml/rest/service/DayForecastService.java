@@ -1,10 +1,15 @@
 package com.ml.rest.service;
 
 import java.util.ArrayList;
+
+
 import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import com.ml.rest.model.PlanetBetasoide;
 import com.ml.rest.model.PlanetFerengi;
@@ -12,6 +17,8 @@ import com.ml.rest.model.PlanetVulcano;
 import com.ml.rest.model.Position;
 import com.ml.rest.util.PositionYComparator;
 
+
+@Component
 public class DayForecastService {
 	
 	private static final Logger log = LoggerFactory.getLogger(DayForecastService.class);
@@ -19,14 +26,23 @@ public class DayForecastService {
 	private static final String WEATHER_RAIN = "lluvia";
 	private static final String WEATHER_OPTIMUS = "optimo";
 	private static final String WEATHER_DRY = "sequia";
-
-	public static String getDayForecast(int dia) {
+	
+	@Autowired	
+	private PlanetBetasoide pbeta;
+	
+	@Autowired	
+	private PlanetFerengi pfere;
+	
+	@Autowired	
+	private PlanetVulcano pvul;	
+	
+	public String getDayForecast(int dia) {
 
 		String clima = WEATHER_DRY;
 
-		PlanetBetasoide pbeta = new PlanetBetasoide();
-		PlanetFerengi pfere = new PlanetFerengi();
-		PlanetVulcano pvul = new PlanetVulcano();
+//		PlanetBetasoide pbeta = new PlanetBetasoide();
+//		PlanetFerengi pfere = new PlanetFerengi();
+//		PlanetVulcano pvul = new PlanetVulcano();
 
 		int betaPositionGrad = pbeta.getOffsetInGrades(dia);
 		log.info("grades beta " + betaPositionGrad);

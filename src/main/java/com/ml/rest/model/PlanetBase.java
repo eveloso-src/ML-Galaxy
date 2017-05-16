@@ -10,7 +10,7 @@ public abstract class PlanetBase implements PlanetMovement {
 	
 	
 	public Position getPosition(int gradesOffset) {
-		double b = 0;
+		
 		
 		double opposite = 0;
 		if (gradesOffset < 90 ) {
@@ -29,21 +29,19 @@ public abstract class PlanetBase implements PlanetMovement {
 		}		
 		
 		
-		opposite = Math.round( Math.sin(Math.toRadians(opposite)));
+		double sen =  Math.sin(Math.toRadians(opposite));
+		double catetoX = sen * getDistance();
 		
 		// pitagoras: o2 + a2 = h2
 		
-		double catetoOP2 = Math.pow(opposite, 2);
+		double catetoOP2 = Math.pow(catetoX, 2);
 		double hipo2 = Math.pow(getDistance(), 2);
 		double adyac = Math.sqrt(hipo2 - catetoOP2);
 
-		return new Position(opposite, Math.round(adyac), gradesOffset);
+		return new Position( catetoX, Math.round(adyac), gradesOffset);
 	}
 	
 	
-	public int getOffsetInGrades(int days) {
-		int fullMovement = (days * getSpeed()) ;
-		return fullMovement % FULL_CYCLE;
-	}
+
 	
 }

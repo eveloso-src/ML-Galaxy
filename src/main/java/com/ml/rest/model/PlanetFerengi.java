@@ -1,5 +1,8 @@
 package com.ml.rest.model;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class PlanetFerengi extends PlanetBase{
 	
 	protected static int SPEED = 1;
@@ -14,6 +17,11 @@ public class PlanetFerengi extends PlanetBase{
 	@Override
 	protected int getDistance() {
 		return DISTANCE;
+	}
+	
+	public int getOffsetInGrades(int days) {
+		int fullMovement = (days * getSpeed()) ;
+		return fullMovement % FULL_CYCLE;
 	}
 	
 }

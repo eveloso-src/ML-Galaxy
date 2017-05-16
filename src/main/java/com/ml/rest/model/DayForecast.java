@@ -1,7 +1,5 @@
 package com.ml.rest.model;
 
-import com.ml.rest.service.DayForecastService;
-
 public class DayForecast {
 
 
@@ -10,7 +8,7 @@ public class DayForecast {
 
     public DayForecast(int dia) {
         this.dia = dia;
-        this.clima = DayForecastService.getDayForecast(dia);
+        
 		
     }
 
