@@ -3,6 +3,9 @@ package com.ml.rest.service;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ml.rest.model.PlanetBetasoide;
 import com.ml.rest.model.PlanetFerengi;
 import com.ml.rest.model.PlanetVulcano;
@@ -10,6 +13,8 @@ import com.ml.rest.model.Position;
 import com.ml.rest.util.PositionYComparator;
 
 public class DayForecastService {
+	
+	private static final Logger log = LoggerFactory.getLogger(DayForecastService.class);
 
 	private static final String WEATHER_RAIN = "lluvia";
 	private static final String WEATHER_OPTIMUS = "optimo";
@@ -23,12 +28,24 @@ public class DayForecastService {
 		PlanetFerengi pfere = new PlanetFerengi();
 		PlanetVulcano pvul = new PlanetVulcano();
 
+		int betaPositionGrad = pbeta.getOffsetInGrades(dia);
+		log.info("grades beta " + betaPositionGrad);
 		// calc offset 1
-		Position posBeta = pbeta.getPosition(pbeta.getOffsetInGrades(dia));
+		Position posBeta = pbeta.getPosition(betaPositionGrad );
+		log.info("beta: " + posBeta.getAxisX() + ", " + posBeta.getAxisY());
+		
+		
+		int ferePositionGrad = pfere.getOffsetInGrades(dia);
 		// calc offset 2
-		Position posFere = pbeta.getPosition(pfere.getOffsetInGrades(dia));
+		Position posFere = pfere.getPosition(ferePositionGrad );
+		log.info("grades fere " + ferePositionGrad);
+		log.info("posFere: " + posFere.getAxisX() + ", " + posFere.getAxisY());
+		
+		int vulPositionGrad = pvul.getOffsetInGrades(dia);
+		log.info("grades vul " + vulPositionGrad);
 		// calc offset 3
-		Position posVul = pbeta.getPosition(pvul.getOffsetInGrades(dia));
+		Position posVul = pvul.getPosition(vulPositionGrad );
+		log.info("posVul: " + posVul.getAxisX() + ", " + posVul.getAxisY());
 
 		boolean horizontal = posBeta.getAxisX() == posFere.getAxisX() && posFere.getAxisX() == posVul.getAxisX()
 				&& (posVul.getAxisX() == 90 || posVul.getAxisX() == 270);
