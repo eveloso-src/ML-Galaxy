@@ -20,7 +20,7 @@ public class WeatherController {
 	
     @RequestMapping("/clima")
     public DayForecast clima(@RequestParam(value="dia", defaultValue="1") Integer dayNumber) {
-        return new DayForecast(dayNumber );
+        return forecastService.getDayForecast(dayNumber);
     }
     
     @RequestMapping("/periodos")
@@ -29,17 +29,11 @@ public class WeatherController {
     	DayForecast fcstAux = null;
     	
     	for(int i=0; i < 30000 ; i++) {
-    		fcst = new DayForecast(i);
-    		fcst.setClima(forecastService.getDayForecast(i));
+    		
+    		fcst = forecastService.getDayForecast(i);
     		if (fcstAux != null && fcstAux.getClima().equals(fcst.getClima())) {
     			
     		}
-    		
     	}
-    	
-    	
-        //return new DayForecast(dayNumber );
     }
-    
-  
 }

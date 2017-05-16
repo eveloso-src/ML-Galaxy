@@ -22,10 +22,10 @@ public abstract class PlanetBase implements PlanetMovement {
 			opposite = 180 - gradesOffset;
 		}
 		else if (gradesOffset > 180  && gradesOffset < 270) { 
-			opposite = 180 - gradesOffset;
+			opposite = gradesOffset - 180;
 		}		
-		else if (gradesOffset > 270) { 
-			opposite = 270 - gradesOffset;
+		else if (gradesOffset > 270 && gradesOffset < FULL_CYCLE) { 
+			opposite = FULL_CYCLE  - gradesOffset ;
 		}		
 		
 		
@@ -38,7 +38,7 @@ public abstract class PlanetBase implements PlanetMovement {
 		double hipo2 = Math.pow(getDistance(), 2);
 		double adyac = Math.sqrt(hipo2 - catetoOP2);
 
-		return new Position( catetoX, Math.round(adyac), gradesOffset);
+		return new Position( Math.round(catetoX), Math.round(adyac), gradesOffset);
 	}
 	
 	

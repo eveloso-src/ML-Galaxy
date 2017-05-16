@@ -1,16 +1,13 @@
 package com.ml.rest.service;
 
 import java.util.ArrayList;
-
-
 import java.util.Collections;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
+import com.ml.rest.model.DayForecast;
 import com.ml.rest.model.PlanetBetasoide;
 import com.ml.rest.model.PlanetFerengi;
 import com.ml.rest.model.PlanetVulcano;
@@ -21,51 +18,51 @@ import com.ml.rest.util.PositionYComparator;
 @Component
 public class DayForecastService {
 	
-	private static final Logger log = LoggerFactory.getLogger(DayForecastService.class);
+	private static final Log log = LogFactory.getLog(DayForecastService.class);
 
 	private static final String WEATHER_RAIN = "lluvia";
 	private static final String WEATHER_OPTIMUS = "optimo";
 	private static final String WEATHER_DRY = "sequia";
 	
-	@Autowired	
-	private PlanetBetasoide pbeta;
+//	@Autowired	
+//	private PlanetBetasoide pbeta;
+//	
+//	@Autowired	
+//	private PlanetFerengi pfere;
+//	
+//	@Autowired	
+//	private PlanetVulcano pvul;	
 	
-	@Autowired	
-	private PlanetFerengi pfere;
-	
-	@Autowired	
-	private PlanetVulcano pvul;	
-	
-	public String getDayForecast(int dia) {
+	public DayForecast getDayForecast(int dia) {
 
 		String clima = WEATHER_DRY;
 
-//		PlanetBetasoide pbeta = new PlanetBetasoide();
-//		PlanetFerengi pfere = new PlanetFerengi();
-//		PlanetVulcano pvul = new PlanetVulcano();
+		PlanetBetasoide pbeta = new PlanetBetasoide();
+		PlanetFerengi pfere = new PlanetFerengi();
+		PlanetVulcano pvul = new PlanetVulcano();
 
 		int betaPositionGrad = pbeta.getOffsetInGrades(dia);
-		log.info("grades beta " + betaPositionGrad);
+		log.debug("grades beta " + betaPositionGrad);
 		// calc offset 1
 		Position posBeta = pbeta.getPosition(betaPositionGrad );
-		log.info("beta: " + posBeta.getAxisX() + ", " + posBeta.getAxisY());
+		log.debug("beta: " + posBeta.getAxisX() + ", " + posBeta.getAxisY());
 		
 		
 		int ferePositionGrad = pfere.getOffsetInGrades(dia);
 		// calc offset 2
 		Position posFere = pfere.getPosition(ferePositionGrad );
-		log.info("grades fere " + ferePositionGrad);
-		log.info("posFere: " + posFere.getAxisX() + ", " + posFere.getAxisY());
+		log.debug("grades fere " + ferePositionGrad);
+		log.debug("posFere: " + posFere.getAxisX() + ", " + posFere.getAxisY());
 		
 		int vulPositionGrad = pvul.getOffsetInGrades(dia);
-		log.info("grades vul " + vulPositionGrad);
+		log.debug("grades vul " + vulPositionGrad);
 		// calc offset 3
 		Position posVul = pvul.getPosition(vulPositionGrad );
-		log.info("posVul: " + posVul.getAxisX() + ", " + posVul.getAxisY());
+		log.debug("posVul: " + posVul.getAxisX() + ", " + posVul.getAxisY());
 
-		boolean horizontal = posBeta.getAxisX() == posFere.getAxisX() && posFere.getAxisX() == posVul.getAxisX()
+		boolean horizontal = posBeta.getAxisY() == posFere.getAxisY() && posFere.getAxisY() == posVul.getAxisY()
 				&& (posVul.getAxisX() == 90 || posVul.getAxisX() == 270);
-		boolean vertical = posBeta.getAxisY() == posFere.getAxisY() && posFere.getAxisY() == posVul.getAxisY()
+		boolean vertical = posBeta.getAxisX() == posFere.getAxisX() && posFere.getAxisX() == posVul.getAxisX()
 				&& (posVul.getAxisX() == 0 || posVul.getAxisX() == 180);
 
 		double yValue = getYvalueForX(posBeta, posFere, 0);
@@ -89,9 +86,9 @@ public class DayForecastService {
 
 			Collections.sort(positionYOrder, new PositionYComparator());
 
-			Position posYMax = positionYOrder.get(0);
+			Position posYMax = positionYOrder.get(2);
 			Position posYMed = positionYOrder.get(1);
-			Position posYMin = positionYOrder.get(2);
+			Position posYMin = positionYOrder.get(0);
 
 			// condition y
 			if (posYMax.getAxisY() > 0 && posYMin.getAxisX() < 0) {
@@ -125,9 +122,9 @@ public class DayForecastService {
 				}
 			} else {
 				// Line up
-				double yValueMaxMed = getYvalueForX(posYMax, posYMed, posYMax.getAxisX());
+				double yValueMaxMed = getYvalueForX(posYMax, posYMed, 0);
 
-				double yValueMaxMin = getYvalueForX(posYMax, posYMin, posYMax.getAxisX());
+				double yValueMaxMin = getYvalueForX(posYMax, posYMin, 0);
 
 				if (yValueMaxMed == yValueMaxMin && yValueMaxMed != 0) {
 					clima = WEATHER_OPTIMUS;
@@ -136,7 +133,7 @@ public class DayForecastService {
 
 		}
 
-		return clima;
+		return new DayForecast(dia, clima);
 	}
 
 	private static double getYvalueForX(Position posA, Position posB, double x) {
