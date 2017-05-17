@@ -10,12 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ml.rest.model.DayForecast;
 import com.ml.rest.service.DayForecastService;
 
+
 @RestController
 public class WeatherController {
 	static Logger log = Logger.getLogger(WeatherController.class.getName());    
 
 	@Autowired
-	DayForecastService forecastService;
+	static DayForecastService forecastService = new DayForecastService();
 	
     @RequestMapping("/clima")
     public DayForecast clima(@RequestParam(value="dia", defaultValue="1") Integer dayNumber) {
@@ -27,40 +28,19 @@ public class WeatherController {
     
     
     	
-    	int contadorPeriodos = getCantidadPeriodos( "lluvia");
+    	int contadorPeriodos = forecastService.getCantidadPeriodos( "lluvia");
     	log.info("cantidad periodos " + "lluvia" + ": " + contadorPeriodos);
     	
-		int contadorPeriodoss = getCantidadPeriodos( "sequia");
+		int contadorPeriodoss = forecastService.getCantidadPeriodos( "sequia");
     	log.info("cantidad periodos sequia" + ": " + contadorPeriodoss);    	
     	
-		int contadorPeriodoso = getCantidadPeriodos( "optimo");
+		int contadorPeriodoso = forecastService.getCantidadPeriodos( "optimo");
     	log.info("cantidad periodos optimo" + ": " + contadorPeriodoso);   
     	
-    	contadorPeriodos = getCantidadPeriodos(tipoClima);
+    	contadorPeriodos = forecastService.getCantidadPeriodos(tipoClima);
     	
     	return contadorPeriodos;
     }
 
-    private int getCantidadPeriodos(String climaPeriodo) {
-		DayForecast fcstAux = new DayForecast();
-		DayForecast fcst; 
-		int contadorPeriodos = 0;
-    	boolean nuevoPeriodo = true;
-    	for(int i=0; i < 3650 ; i++) {
-    		fcstAux.setDia(i);	
-    		fcst = forecastService.getDayForecast(i);
-    		
-    		if (fcstAux != null && fcstAux.getClima()!=null && !fcstAux.getClima().equals(fcst.getClima()) && fcst.getClima().equals(climaPeriodo) && nuevoPeriodo) {
-    			//clima = fcst.getClima();
-    			contadorPeriodos++;
-    			nuevoPeriodo = false;
-    			//log.info("sumar periodo " + i);
-    		}
-    		else {
-    			nuevoPeriodo = true;
-    		}
-    		fcstAux.setClima(fcst.getClima());
-    	}
-		return contadorPeriodos;
-	}
+    
 }

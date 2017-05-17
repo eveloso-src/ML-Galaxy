@@ -5,81 +5,63 @@ import java.util.Collections;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.ml.rest.model.DayForecast;
+import com.ml.rest.model.Line;
+import com.ml.rest.model.PlanetBase;
 import com.ml.rest.model.PlanetBetasoide;
 import com.ml.rest.model.PlanetFerengi;
 import com.ml.rest.model.PlanetVulcano;
 import com.ml.rest.model.Position;
+import com.ml.rest.util.PlanetFactory;
 import com.ml.rest.util.PositionYComparator;
 
 
-@Component
+@Component("forecastService")
+
 public class DayForecastService {
 	
-	private static final Log log = LogFactory.getLog(DayForecastService.class);
-
-	public static final String WEATHER_RAIN = "lluvia";
-	public static final String WEATHER_OPTIMUS = "optimo";
-	public static final String WEATHER_DRY = "sequia";
+	private static final double ZERO = 0;
 	
-//	@Bean
+	private static final Log log = LogFactory.getLog(DayForecastService.class);
+//	@Autowired
 //	private PlanetBetasoide pbeta;
 //	
-//	@Bean	
+//	@Autowired	
 //	private PlanetFerengi pfere;
 //	
-//	@Bean	
+//	@Autowired
 //	private PlanetVulcano pvul;	
 	
+	
+	private GeometricService geoService = new GeometricService();
+	
 	public DayForecast getDayForecast(int dia) {
-
-		String clima = WEATHER_DRY;
-
-		PlanetBetasoide pbeta = new PlanetBetasoide();
-		PlanetFerengi pfere = new PlanetFerengi();
-		PlanetVulcano pvul = new PlanetVulcano();
-
-		int betaPositionGrad = pbeta.getOffsetInGrades(dia);
-		////log.debug("grades beta " + betaPositionGrad);
-		// calc offset 1
-		Position posBeta = pbeta.getPosition(betaPositionGrad );
-		//log.debug("beta: " + posBeta.getAxisX() + ", " + posBeta.getAxisY());
 		
-		
-		int ferePositionGrad = pfere.getOffsetInGrades(dia);
-		// calc offset 2
-		Position posFere = pfere.getPosition(ferePositionGrad );
-		//log.debug("grades fere " + ferePositionGrad);
-		//log.debug("posFere: " + posFere.getAxisX() + ", " + posFere.getAxisY());
-		
-		int vulPositionGrad = pvul.getOffsetInGrades(dia);
-		//log.debug("grades vul " + vulPositionGrad);
-		// calc offset 3
-		Position posVul = pvul.getPosition(vulPositionGrad );
-		//log.debug("posVul: " + posVul.getAxisX() + ", " + posVul.getAxisY());
+		String clima = DayForecast.WEATHER_DRY;
 
-		boolean horizontal = posBeta.getAxisY() == posFere.getAxisY() && posFere.getAxisY() == posVul.getAxisY()
-				&& (posVul.getAxisX() == 90 || posVul.getAxisX() == 270);
-		boolean vertical = posBeta.getAxisX() == posFere.getAxisX() && posFere.getAxisX() == posVul.getAxisX()
-				&& (posVul.getAxisX() == 0 || posVul.getAxisX() == 180);
+		PlanetBetasoide pbeta = (PlanetBetasoide) PlanetFactory.getPlanet(PlanetBase.PLANET_BETA);
+		PlanetFerengi pfere = (PlanetFerengi) PlanetFactory.getPlanet(PlanetBase.PLANET_FERE);
+		PlanetVulcano pvul = (PlanetVulcano) PlanetFactory.getPlanet(PlanetBase.PLANET_VULC);
 
-		double yValue = getYvalueForX(posBeta, posFere, 0);
 
-		double yValue2 = getYvalueForX(posVul, posFere, 0);
+		// get positions
+		Position posBeta = pbeta.getPosition(pbeta.getOffsetInGrades(dia) );
 
-		double yValue3 = getYvalueForX(posVul, posBeta, 0);
+		Position posFere = pfere.getPosition( pfere.getOffsetInGrades(dia) );
 
-		boolean diagonal = yValue == 0 && yValue2 == 0;
+		Position posVul = pvul.getPosition(pvul.getOffsetInGrades(dia) );
 
-		if (horizontal || vertical || diagonal) {
-			clima = WEATHER_RAIN;
+
+
+		// Sun line
+		if (isSunLine(posBeta, posFere, posVul)) {
+			clima = DayForecast.WEATHER_RAIN;
 		} else {
-
-			// triang
-
+			
+			
+			// order
 			java.util.List<Position> positionYOrder = new ArrayList<Position>();
 			positionYOrder.add(posFere);
 			positionYOrder.add(posBeta);
@@ -90,49 +72,19 @@ public class DayForecastService {
 			Position posYMax = positionYOrder.get(2);
 			Position posYMed = positionYOrder.get(1);
 			Position posYMin = positionYOrder.get(0);
-
-			// condition y
-			if (posYMax.getAxisY() > 0 && posYMin.getAxisX() < 0) {
-
-				// condition x
-
-				if (
-				// different side y
-				(posYMax.getAxisX() > 0 && posYMin.getAxisX() < 0) ||
-
-				// different opposite side y
-						(posYMax.getAxisX() < 0 && posYMin.getAxisX() > 0) ||
-
-						// same side y but mid different side
-						(posYMax.getAxisX() < 0 && posYMed.getAxisX() > 0) ||
-
-						// same side y but mid different opposite side
-						(posYMax.getAxisX() > 0 && posYMed.getAxisX() < 0)
-
-				) {
-
-					double yValueMaxMin = getYvalueForX(posYMax, posYMin, 0);
-					double yValueMaxMed = getYvalueForX(posYMax, posYMed, 0);
-
-					// Position y0-min, y0-med > 0
-					if ((yValueMaxMin > 0 && yValueMaxMed < 0) || yValueMaxMin < 0 && yValueMaxMed > 0) {
-						
-						// perim max
-						int lengthTotal = getMaxLenght(posYMax, posYMed, posYMin);
-						
-
-						clima = WEATHER_RAIN;
-
-					}
-				}
+			
+			if (isTriangle(posYMax, posYMed, posYMin)) {
+				
+				clima = DayForecast.WEATHER_RAIN;
+			
 			} else {
 				// Line up
-				double yValueMaxMed = getYvalueForX(posYMax, posYMed, 0);
+				double yValueMaxMed = geoService.getYvalueForX(posYMax, posYMed, ZERO);
 
-				double yValueMaxMin = getYvalueForX(posYMax, posYMin, 0);
+				double yValueMaxMin = geoService.getYvalueForX(posYMax, posYMin, ZERO);
 
-				if (yValueMaxMed == yValueMaxMin && yValueMaxMed != 0) {
-					clima = WEATHER_OPTIMUS;
+				if (yValueMaxMed == yValueMaxMin && yValueMaxMed != ZERO) {
+					clima = DayForecast.WEATHER_OPTIMUS;
 				}
 			}
 
@@ -140,60 +92,112 @@ public class DayForecastService {
 
 		return new DayForecast(dia, clima);
 	}
+		
+	private boolean isTriangle(Position posYMax, Position posYMed, Position posYMin) {
 
-	private int getMaxLenght(Position posYMax, Position posYMed, Position posYMin) {
+		// condition y
+		if (posYMax.getAxisY() > ZERO && posYMin.getAxisX() < ZERO) {
 
-		double longMaxMed = 0;
-		double longMaxMedX = 0;
-		
-		double yMax = posYMax.getAxisY();
-		double yMed = posYMed.getAxisY();
-		
-		double xMax = posYMax.getAxisX();
-		double xMed = posYMed.getAxisX();
-		
-		if (yMax > 0 && yMed > 0) {
-			longMaxMed = Math.pow(yMax + yMed , 2);
+			// condition x
+			if (
+			// different side y
+			(posYMax.getAxisX() > ZERO && posYMin.getAxisX() < ZERO) ||
+
+			// different opposite side y
+					(posYMax.getAxisX() < ZERO && posYMin.getAxisX() > ZERO) ||
+
+					// same side y but mid different side
+					(posYMax.getAxisX() < ZERO && posYMed.getAxisX() > ZERO) ||
+
+					// same side y but mid different opposite side
+					(posYMax.getAxisX() > 0 && posYMed.getAxisX() < 0)
+
+			) {
+
+				double yValueMaxMin = geoService.getYvalueForX(posYMax, posYMin, 0);
+				double yValueMaxMed = geoService.getYvalueForX(posYMax, posYMed, 0);
+
+				// Position y0-min, y0-med > 0
+				if ((yValueMaxMin > 0 && yValueMaxMed < 0) || yValueMaxMin < 0 && yValueMaxMed > 0) {
+
+					return true;
+				}
+			}
 		}
-		else {
-			
-		}
-		
-		if (xMax > 0 && xMed > 0) {
-			longMaxMedX = Math.pow(xMax + xMed , 2);
-		}	
-		else {
-			
-		}
-		
-		
-		
-		
-	return 0;
-}
+		return false;
 
-	private static double getYvalueForX(Position posA, Position posB, double x) {
-		// verificar diagonal
-		// (y -y1) / (y2 - y1) = (x -x1) / (x2 -x1)
-		// y=0 si x=0
-
-		double y1 = posA.getAxisY();
-		double y2 = posB.getAxisY();
-
-		double x1 = posA.getAxisX();
-		double x2 = posB.getAxisX();
-
-		double yDiff = y2 - y1;
-		double xDiff = x2 - x1;
-
-		// si x=0
-
-		double x0 = x - 1 * posA.getAxisX();
-
-		double term2 = x0 / xDiff;
-
-		double yValue = (term2 * yDiff) + y1;
-		return yValue;
 	}
+
+	private boolean isSunLine(Position posBeta, Position posFere, Position posVul) {
+		boolean horizontal = posBeta.getAxisY() == posFere.getAxisY() && posFere.getAxisY() == posVul.getAxisY()
+				&& (posVul.getAxisX() == 90 || posVul.getAxisX() == 270);
+		boolean vertical = posBeta.getAxisX() == posFere.getAxisX() && posFere.getAxisX() == posVul.getAxisX()
+				&& (posVul.getAxisX() == ZERO || posVul.getAxisX() == 180);
+
+		double yValue = geoService.getYvalueForX(posBeta, posFere, ZERO);
+
+		double yValue2 = geoService.getYvalueForX(posVul, posFere, ZERO);
+
+		// double yValue3 = getYvalueForX(posVul, posBeta, 0);
+
+		boolean diagonal = yValue == ZERO && yValue2 == ZERO;
+
+		return horizontal || vertical || diagonal;
+	}
+
+	public int getCantidadPeriodos(String climaPeriodo) {
+		DayForecast fcstAux = new DayForecast();
+		DayForecast fcst; 
+		int contadorPeriodos = 0;
+    	boolean nuevoPeriodo = true;
+    	double maxLength = 0;
+    	int maxDay = 0;
+    	double currentLength;
+		for (int i = 0; i < 3650; i++) {
+    		fcstAux.setDia(i);	
+    		fcst = getDayForecast(i);
+    		
+    		if (fcstAux != null && fcstAux.getClima()!=null && !fcstAux.getClima().equals(fcst.getClima()) && fcst.getClima().equals(climaPeriodo) && nuevoPeriodo) {
+    			
+    			contadorPeriodos++;
+    			nuevoPeriodo = false;
+    			
+    			if (DayForecast.WEATHER_RAIN.equals(fcst.getClima()) ) {
+    				java.util.List<Line> lines = new ArrayList<Line>();
+    				
+    				PlanetBetasoide pbeta = (PlanetBetasoide) PlanetFactory.getPlanet(PlanetBase.PLANET_BETA);
+    				PlanetFerengi pfere = (PlanetFerengi) PlanetFactory.getPlanet(PlanetBase.PLANET_FERE);
+    				PlanetVulcano pvul = (PlanetVulcano) PlanetFactory.getPlanet(PlanetBase.PLANET_VULC);
+
+
+    				// get positions
+    				Position posBeta = pbeta.getPosition(pbeta.getOffsetInGrades(i) );
+    				Position posFere = pfere.getPosition( pfere.getOffsetInGrades(i) );
+    				Position posVul = pvul.getPosition(pvul.getOffsetInGrades(i) );
+    				
+    				lines.add(new Line(posBeta, posFere));
+    				lines.add(new Line(posBeta, posVul));
+    				lines.add(new Line(posFere, posVul));
+    				
+    				currentLength = geoService.getPerimeter(lines );
+    				if (maxLength < currentLength) {
+    					maxLength = currentLength;
+    					maxDay = i;
+    				}
+    			}
+
+    		}
+    		else {
+    			nuevoPeriodo = true;
+    		}
+    		fcstAux.setClima(fcst.getClima());
+    	}
+		
+		if (DayForecast.WEATHER_RAIN.equals(climaPeriodo) ) {
+			log.info("Maxima cantidad lluvias dia: " + maxDay);
+			
+		}
+		return contadorPeriodos;
+	}	
 
 }

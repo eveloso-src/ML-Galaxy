@@ -4,6 +4,10 @@ import com.ml.rest.interfaces.PlanetMovement;
 
 public abstract class PlanetBase implements PlanetMovement {
 	
+	public static final String PLANET_BETA = "Betasoide";
+	public static final String PLANET_FERE = "Ferengi";
+	public static final String PLANET_VULC = "Vulcano";
+	
 	protected static final int FULL_CYCLE = 360;
 	protected abstract int getSpeed();	
 	protected abstract int getDistance();

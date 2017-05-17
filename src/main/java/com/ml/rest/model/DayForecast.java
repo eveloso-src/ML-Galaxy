@@ -2,9 +2,13 @@ package com.ml.rest.model;
 
 public class DayForecast {
 
+	public static final String WEATHER_RAIN = "lluvia";
+	public static final String WEATHER_OPTIMUS = "optimo";
+	public static final String WEATHER_DRY = "sequia";
 
 	private int dia;
     private String clima;
+    
     
     public DayForecast() {
     	
