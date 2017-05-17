@@ -116,6 +116,10 @@ public class DayForecastService {
 
 					// Position y0-min, y0-med > 0
 					if ((yValueMaxMin > 0 && yValueMaxMed < 0) || yValueMaxMin < 0 && yValueMaxMed > 0) {
+						
+						// perim max
+						int lengthTotal = getMaxLenght(posYMax, posYMed, posYMin);
+						
 
 						clima = WEATHER_RAIN;
 
@@ -136,6 +140,37 @@ public class DayForecastService {
 
 		return new DayForecast(dia, clima);
 	}
+
+	private int getMaxLenght(Position posYMax, Position posYMed, Position posYMin) {
+
+		double longMaxMed = 0;
+		double longMaxMedX = 0;
+		
+		double yMax = posYMax.getAxisY();
+		double yMed = posYMed.getAxisY();
+		
+		double xMax = posYMax.getAxisX();
+		double xMed = posYMed.getAxisX();
+		
+		if (yMax > 0 && yMed > 0) {
+			longMaxMed = Math.pow(yMax + yMed , 2);
+		}
+		else {
+			
+		}
+		
+		if (xMax > 0 && xMed > 0) {
+			longMaxMedX = Math.pow(xMax + xMed , 2);
+		}	
+		else {
+			
+		}
+		
+		
+		
+		
+	return 0;
+}
 
 	private static double getYvalueForX(Position posA, Position posB, double x) {
 		// verificar diagonal
