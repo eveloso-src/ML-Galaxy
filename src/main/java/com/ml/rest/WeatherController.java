@@ -25,15 +25,28 @@ public class WeatherController {
     
     @RequestMapping("/periodos")
     public void periodos() {
-    	DayForecast fcst; 
-    	DayForecast fcstAux = null;
-    	
-    	for(int i=0; i < 30000 ; i++) {
-    		
-    		fcst = forecastService.getDayForecast(i);
-    		if (fcstAux != null && fcstAux.getClima().equals(fcst.getClima())) {
-    			
-    		}
-    	}
+    
+    
+    	getClimaPeriodos("lluvia");
     }
+
+	public int getClimaPeriodos(String climaPeriodo) {
+		DayForecast fcstAux = new DayForecast();
+		DayForecast fcst; 
+    	
+    	String clima;
+    	int contadorPeriodos = 0;
+    	for(int i=0; i < 36000 ; i++) {
+    		fcstAux.setDia(i);	
+    		fcst = forecastService.getDayForecast(i);
+    		
+    		if (fcstAux != null && !fcstAux.getClima().equals(fcst.getClima()) && fcst.getClima().equals(climaPeriodo)) {
+    			clima = fcst.getClima();
+    			contadorPeriodos++;
+    		}
+    		fcstAux.setClima(fcst.getClima());
+    	}
+		
+    	return contadorPeriodos;
+	}
 }

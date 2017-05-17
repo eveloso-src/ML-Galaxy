@@ -2,12 +2,10 @@ package rest;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.ComponentScan;
 
+import org.springframework.context.annotation.ComponentScan;
+import org.apache.log4j.Logger;
 import com.ml.rest.model.DayForecast;
 import com.ml.rest.service.DayForecastService;
 
@@ -16,28 +14,47 @@ import com.ml.rest.service.DayForecastService;
 @ComponentScan(basePackages = {"com.ml.rest.service"})
 public class ForecastTest {
 	
-	private static final Logger log = LoggerFactory.getLogger(ForecastTest.class);
+//	private static final Logger log = LoggerFactory.getLogger(ForecastTest.class);
+	static Logger log = Logger.getLogger(ForecastTest.class.getName());
+	   
 	
 
 	
 	DayForecastService forecastService = new DayForecastService();
 
 	@Test
-	public void testForecast() {
-		DayForecast fcst;
-		DayForecast fcstAux = null;
-		log.info("Comienzo");
+	public void testPeriodos() {
 
-		for (int i = 0; i < 181; i++) {
-			
+		int contadorPeriodos = getCantidadPeriodos( "lluvia");
+    	log.info("cantidad periodos " + "lluvia" + ": " + contadorPeriodos);
+    	
+		int contadorPeriodoss = getCantidadPeriodos( "sequia");
+    	log.info("cantidad periodos sequia" + ": " + contadorPeriodoss);    	
+    	
+		int contadorPeriodoso = getCantidadPeriodos( "optimo");
+    	log.info("cantidad periodos optimo" + ": " + contadorPeriodoso);        	
+	}
+
+	private int getCantidadPeriodos(String climaPeriodo) {
+		DayForecast fcstAux = new DayForecast();
+		DayForecast fcst; 
+		int contadorPeriodos = 0;
+    	boolean nuevoPeriodo = true;
+    	for(int i=0; i < 36000 ; i++) {
+    		fcstAux.setDia(i);	
     		fcst = forecastService.getDayForecast(i);
-			log.info("#" + i + " " + fcst.getClima());
-			log.info("--------------------------");
-
-			if (fcstAux != null && fcstAux.getClima().equals(fcst.getClima())) {
-
-			}
-
-		}
+    		
+    		if (fcstAux != null && fcstAux.getClima()!=null && !fcstAux.getClima().equals(fcst.getClima()) && fcst.getClima().equals(climaPeriodo) && nuevoPeriodo) {
+    			//clima = fcst.getClima();
+    			contadorPeriodos++;
+    			nuevoPeriodo = false;
+    			//log.info("sumar periodo " + i);
+    		}
+    		else {
+    			nuevoPeriodo = true;
+    		}
+    		fcstAux.setClima(fcst.getClima());
+    	}
+		return contadorPeriodos;
 	}
 }

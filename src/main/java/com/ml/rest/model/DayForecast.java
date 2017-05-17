@@ -5,6 +5,10 @@ public class DayForecast {
 
 	private int dia;
     private String clima;
+    
+    public DayForecast() {
+    	
+    }
 
     public DayForecast(int dia, String clima) {
         this.dia = dia;

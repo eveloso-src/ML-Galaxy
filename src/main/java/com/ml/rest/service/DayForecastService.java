@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.ml.rest.model.DayForecast;
@@ -20,17 +21,17 @@ public class DayForecastService {
 	
 	private static final Log log = LogFactory.getLog(DayForecastService.class);
 
-	private static final String WEATHER_RAIN = "lluvia";
-	private static final String WEATHER_OPTIMUS = "optimo";
-	private static final String WEATHER_DRY = "sequia";
+	public static final String WEATHER_RAIN = "lluvia";
+	public static final String WEATHER_OPTIMUS = "optimo";
+	public static final String WEATHER_DRY = "sequia";
 	
-//	@Autowired	
+//	@Bean
 //	private PlanetBetasoide pbeta;
 //	
-//	@Autowired	
+//	@Bean	
 //	private PlanetFerengi pfere;
 //	
-//	@Autowired	
+//	@Bean	
 //	private PlanetVulcano pvul;	
 	
 	public DayForecast getDayForecast(int dia) {
@@ -42,23 +43,23 @@ public class DayForecastService {
 		PlanetVulcano pvul = new PlanetVulcano();
 
 		int betaPositionGrad = pbeta.getOffsetInGrades(dia);
-		log.debug("grades beta " + betaPositionGrad);
+		////log.debug("grades beta " + betaPositionGrad);
 		// calc offset 1
 		Position posBeta = pbeta.getPosition(betaPositionGrad );
-		log.debug("beta: " + posBeta.getAxisX() + ", " + posBeta.getAxisY());
+		//log.debug("beta: " + posBeta.getAxisX() + ", " + posBeta.getAxisY());
 		
 		
 		int ferePositionGrad = pfere.getOffsetInGrades(dia);
 		// calc offset 2
 		Position posFere = pfere.getPosition(ferePositionGrad );
-		log.debug("grades fere " + ferePositionGrad);
-		log.debug("posFere: " + posFere.getAxisX() + ", " + posFere.getAxisY());
+		//log.debug("grades fere " + ferePositionGrad);
+		//log.debug("posFere: " + posFere.getAxisX() + ", " + posFere.getAxisY());
 		
 		int vulPositionGrad = pvul.getOffsetInGrades(dia);
-		log.debug("grades vul " + vulPositionGrad);
+		//log.debug("grades vul " + vulPositionGrad);
 		// calc offset 3
 		Position posVul = pvul.getPosition(vulPositionGrad );
-		log.debug("posVul: " + posVul.getAxisX() + ", " + posVul.getAxisY());
+		//log.debug("posVul: " + posVul.getAxisX() + ", " + posVul.getAxisY());
 
 		boolean horizontal = posBeta.getAxisY() == posFere.getAxisY() && posFere.getAxisY() == posVul.getAxisY()
 				&& (posVul.getAxisX() == 90 || posVul.getAxisX() == 270);
