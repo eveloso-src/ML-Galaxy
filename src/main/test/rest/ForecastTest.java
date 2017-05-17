@@ -40,7 +40,7 @@ public class ForecastTest {
 		DayForecast fcst; 
 		int contadorPeriodos = 0;
     	boolean nuevoPeriodo = true;
-    	for(int i=0; i < 36000 ; i++) {
+    	for(int i=0; i < 3600 ; i++) {
     		fcstAux.setDia(i);	
     		fcst = forecastService.getDayForecast(i);
     		
