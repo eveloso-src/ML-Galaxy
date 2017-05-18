@@ -5,8 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.ml.rest.model.DayForecast;
-import com.ml.rest.service.DayForecastService;
+import com.ml.rest.service.impl.DayForecastService;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -20,13 +19,13 @@ public class ForecastTest {
 	@Test
 	public void testPeriodos() {
 
-		int contadorPeriodos = forecastService.getCantidadPeriodos( "lluvia");
+		int contadorPeriodos = forecastService.getPeriodAmount( "lluvia");
     	log.info("cantidad periodos " + "lluvia" + ": " + contadorPeriodos);
     	
-		int contadorPeriodoss = forecastService.getCantidadPeriodos( "sequia");
+		int contadorPeriodoss = forecastService.getPeriodAmount( "sequia");
     	log.info("cantidad periodos sequia" + ": " + contadorPeriodoss);    	
     	
-		int contadorPeriodoso = forecastService.getCantidadPeriodos( "optimo");
+		int contadorPeriodoso = forecastService.getPeriodAmount( "optimo");
     	log.info("cantidad periodos optimo" + ": " + contadorPeriodoso);        	
 	}
 

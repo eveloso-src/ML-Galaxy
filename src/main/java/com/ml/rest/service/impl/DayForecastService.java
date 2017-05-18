@@ -1,4 +1,4 @@
-package com.ml.rest.service;
+package com.ml.rest.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,26 +14,18 @@ import com.ml.rest.model.PlanetBetasoide;
 import com.ml.rest.model.PlanetFerengi;
 import com.ml.rest.model.PlanetVulcano;
 import com.ml.rest.model.Position;
+import com.ml.rest.service.IDayForecastService;
 import com.ml.rest.util.PlanetFactory;
 import com.ml.rest.util.PositionYComparator;
 
 
 @Component("forecastService")
 
-public class DayForecastService {
+public class DayForecastService implements IDayForecastService{
 	
 	private static final double ZERO = 0;
 	
 	private static final Log log = LogFactory.getLog(DayForecastService.class);
-//	@Autowired
-//	private PlanetBetasoide pbeta;
-//	
-//	@Autowired	
-//	private PlanetFerengi pfere;
-//	
-//	@Autowired
-//	private PlanetVulcano pvul;	
-	
 	
 	private GeometricService geoService = new GeometricService();
 	
@@ -145,7 +137,7 @@ public class DayForecastService {
 		return horizontal || vertical || diagonal;
 	}
 
-	public int getCantidadPeriodos(String climaPeriodo) {
+	public int getPeriodAmount(String climaPeriodo) {
 		DayForecast fcstAux = new DayForecast();
 		DayForecast fcst; 
 		int contadorPeriodos = 0;

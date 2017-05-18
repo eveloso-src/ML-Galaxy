@@ -1,4 +1,4 @@
-package com.ml.rest.service;
+package com.ml.rest.service.impl;
 
 import java.util.List;
 
@@ -6,10 +6,11 @@ import org.springframework.stereotype.Component;
 
 import com.ml.rest.model.Line;
 import com.ml.rest.model.Position;
+import com.ml.rest.service.IGeometricService;
 
 
 @Component("geoService")
-public class GeometricService {
+public class GeometricService implements IGeometricService {
 	
 	public double getPerimeter(List<Line> lines ) { 
 

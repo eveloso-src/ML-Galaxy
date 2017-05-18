@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ml.rest.model.DayForecast;
-import com.ml.rest.service.DayForecastService;
+import com.ml.rest.service.impl.DayForecastService;
 
 
 @RestController
@@ -28,16 +28,16 @@ public class WeatherController {
     
     
     	
-    	int contadorPeriodos = forecastService.getCantidadPeriodos( "lluvia");
+    	int contadorPeriodos = forecastService.getPeriodAmount( "lluvia");
     	log.info("cantidad periodos " + "lluvia" + ": " + contadorPeriodos);
     	
-		int contadorPeriodoss = forecastService.getCantidadPeriodos( "sequia");
+		int contadorPeriodoss = forecastService.getPeriodAmount( "sequia");
     	log.info("cantidad periodos sequia" + ": " + contadorPeriodoss);    	
     	
-		int contadorPeriodoso = forecastService.getCantidadPeriodos( "optimo");
+		int contadorPeriodoso = forecastService.getPeriodAmount( "optimo");
     	log.info("cantidad periodos optimo" + ": " + contadorPeriodoso);   
     	
-    	contadorPeriodos = forecastService.getCantidadPeriodos(tipoClima);
+    	contadorPeriodos = forecastService.getPeriodAmount(tipoClima);
     	
     	return contadorPeriodos;
     }
